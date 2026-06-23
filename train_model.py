@@ -17,10 +17,6 @@ import joblib
 df = pd.read_csv(r"D:\Projects\bank_customer_churn\Bank Customer Churn Prediction.csv")
 df_copy = df.copy()
 
-#one hot encoding
-df = pd.get_dummies(df, columns=['country', 'gender'], drop_first=True)
-
-
 
 #feature engineering
 def banking_feature_eng(dataset):
@@ -39,7 +35,7 @@ def banking_feature_eng(dataset):
     df_fe['age_group'] = pd.cut(df_fe['age'], bins=age_bins, labels=age_labels, include_lowest=True)
 
     #one hot for age_group
-    df_fe = pd.get_dummies(df_fe, columns=['age_group'], drop_first=True)
+    df_fe = pd.get_dummies(df_fe, columns=['age_group', 'country', 'gender'], drop_first=True)
 
     # capping age outlier with 99 percentile method
     upper_limit = df_fe['age'].quantile(0.99)
@@ -55,13 +51,9 @@ X = df.drop(columns=['customer_id', 'churn'])
 y = df['churn']
 
 
-X_train, X_temp, y_train, y_temp = train_test_split(
-    X, y, test_size=0.3, stratify=y, random_state=42
-)
+X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, stratify=y, random_state=42)
 
-X_val, X_test, y_val, y_test = train_test_split(
-    X_temp, y_temp, test_size=0.5, stratify=y_temp, random_state=42
-)
+X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, stratify=y_temp, random_state=42)
 
 mean_balance = X_train['balance'].mean()
 
