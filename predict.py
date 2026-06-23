@@ -27,20 +27,14 @@ new_customer = pd.DataFrame({
 
 new_customer = banking_feature_eng(new_customer)
 
-
-new_customer["is_welthy_active"] = (
-    (new_customer["balance"] > mean_balance) &
-    (new_customer["active_member"] == 1)
-).astype(int)
-
 for col in feature_columns:
     if col not in new_customer.columns:
         new_customer[col] = 0
 
 new_customer = new_customer[feature_columns]
+new_customer["is_welthy_active"] = ((new_customer["balance"] > mean_balance) & (new_customer["active_member"] == 1)).astype(int)
 
-
-prob = model.predict_proba(new_customer.to_numpy())[:, 1][0]
+prob = model.predict_proba(new_customer.values)[:,1][0]
 
 
 print(f"Churn Probability: {prob:.4f}")
