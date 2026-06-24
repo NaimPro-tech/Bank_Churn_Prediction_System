@@ -34,7 +34,7 @@ def banking_feature_eng(dataset):
     age_labels = ['Young', 'Middle_Aged', 'Senior']
     df_fe['age_group'] = pd.cut(df_fe['age'], bins=age_bins, labels=age_labels, include_lowest=True)
 
-    #one hot for age_group
+    #one hot for age_group, country and gender
     df_fe = pd.get_dummies(df_fe, columns=['age_group', 'country', 'gender'], drop_first=True)
 
     # capping age outlier with 99 percentile method
